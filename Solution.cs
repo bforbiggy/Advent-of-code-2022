@@ -1,9 +1,15 @@
 ﻿using System;
 
 // Returns true if range a is contained entirely within b
-bool rangeInRange(int[] a, int[] b)
+bool rangesIntersect(int[] a, int[] b)
 {
-	return a[0] >= b[0] && a[1] <= b[1];
+	// Left end of a is in b
+	if (a[0] >= b[0] && a[0] <= b[1])
+		return true;
+	// Right end of a is in b
+	else if (a[1] >= b[0] && a[1] <= b[1])
+		return true;
+	return false;
 }
 
 // Converts a range string (3-9) to a range array
@@ -20,7 +26,7 @@ foreach (string line in File.ReadLines("input.txt"))
 	int[] a = stringToAssignment(assignments[0]);
 	int[] b = stringToAssignment(assignments[1]);
 
-	if (rangeInRange(a, b) || rangeInRange(b, a))
+	if (rangesIntersect(a, b) || rangesIntersect(b, a))
 	{
 		count++;
 	}
