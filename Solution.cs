@@ -1,8 +1,8 @@
 ﻿using System;
 using System.IO;
 
-int max = -1;
-int curr = 0;
+long max = -1;
+long curr = 0;
 foreach (string line in File.ReadLines("input.txt"))
 {
 	// Empty line: Update max and reset elf count
@@ -13,7 +13,7 @@ foreach (string line in File.ReadLines("input.txt"))
 		continue;
 	}
 
-	curr += Int32.Parse(line);
+	curr += long.Parse(line);
 }
 
 Console.WriteLine(max);
