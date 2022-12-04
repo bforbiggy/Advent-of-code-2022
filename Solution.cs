@@ -6,21 +6,31 @@ int charToValue(char c)
 }
 
 int total = 0;
-foreach (string line in File.ReadLines("input.txt"))
+
+string[] lines = File.ReadAllLines("input.txt");
+for (int i = 0; i < lines.Length; i += 3)
 {
-	// Store all char appearances of left side
-	HashSet<char> exists = new HashSet<char>();
-	for (int i = 0; i < line.Length / 2; i++)
+	Dictionary<char, int> shared = new Dictionary<char, int>();
+
+	for (int j = i; j < i + 3; j++)
 	{
-		exists.Add(line[i]);
+		HashSet<char> set = new HashSet<char>();
+		foreach (char c in lines[j])
+		{
+			// New characters are tracked
+			if (!set.Contains(c))
+			{
+				shared[c] = shared.GetValueOrDefault(c, 0) + 1;
+				set.Add(c);
+			}
+		}
 	}
 
-	// Find shared char in right side
-	for (int i = line.Length / 2; i < line.Length; i++)
+	foreach (KeyValuePair<char, int> entry in shared)
 	{
-		if (exists.Contains(line[i]))
+		if (entry.Value == 3)
 		{
-			total += charToValue(line[i]);
+			total += charToValue(entry.Key);
 			break;
 		}
 	}
