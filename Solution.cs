@@ -1,9 +1,19 @@
 ﻿using System;
+using System.IO;
 
-public class Solution
+int max = -1;
+int curr = 0;
+foreach (string line in File.ReadLines("input.txt"))
 {
-	public static void Main()
+	// Empty line: Update max and reset elf count
+	if (line.Length == 0)
 	{
-		Console.WriteLine("Initial commit.");
+		max = Math.Max(max, curr);
+		curr = 0;
+		continue;
 	}
+
+	curr += Int32.Parse(line);
 }
+
+Console.WriteLine(max);
