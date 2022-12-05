@@ -40,10 +40,17 @@ for (int i = row; i < lines.Length; i++)
 	int toIndex = Int32.Parse(tokens[2]) - 1;
 
 	// Perform operation
+	LinkedList<char> removed = new LinkedList<char>();
 	for (int j = 0; j < removeCount; j++)
 	{
-		stacks[toIndex].AddLast(stacks[fromIndex].Last.Value);
+		removed.AddFirst(stacks[fromIndex].Last.Value);
 		stacks[fromIndex].RemoveLast();
+	}
+
+	while (removed.Count != 0)
+	{
+		stacks[toIndex].AddLast(removed.First.Value);
+		removed.RemoveFirst();
 	}
 }
 
