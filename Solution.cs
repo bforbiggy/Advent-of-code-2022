@@ -39,7 +39,7 @@ for (int i = row; i < lines.Length; i++)
 	int fromIndex = Int32.Parse(tokens[1]) - 1;
 	int toIndex = Int32.Parse(tokens[2]) - 1;
 
-	// Perform operation
+	// Remove items from stack, preserving order
 	LinkedList<char> removed = new LinkedList<char>();
 	for (int j = 0; j < removeCount; j++)
 	{
@@ -47,6 +47,7 @@ for (int i = row; i < lines.Length; i++)
 		stacks[fromIndex].RemoveLast();
 	}
 
+	// Add items to destination, preserving order
 	while (removed.Count != 0)
 	{
 		stacks[toIndex].AddLast(removed.First.Value);
@@ -54,7 +55,7 @@ for (int i = row; i < lines.Length; i++)
 	}
 }
 
-// Output stacks
+// Output top element of each stack
 foreach (LinkedList<char> stack in stacks)
 {
 	Console.Write(stack.Last.Value);
