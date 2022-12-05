@@ -1,9 +1,31 @@
 ﻿using System;
 
-public class Solution
+string[] lines = File.ReadAllLines("input.txt");
+int columnCount = (lines[0].Length / 4) + 1;
+
+// Create array of stacks
+LinkedList<char>[] stacks = new LinkedList<char>[columnCount];
+for (int index = 0; index < columnCount; index++)
+	stacks[index] = new LinkedList<char>();
+
+// Populate stacks row by row
+int i;
+for (i = 0; lines[i].Contains("["); i++)
 {
-	public static void Main()
+	// Parse each crate in line
+	int col = 0;
+	for (int j = 1; j < lines[i].Length; j += 4)
 	{
-		Console.WriteLine("Initial commit.");
+		if (!char.IsWhiteSpace(lines[i][j]))
+		{
+			stacks[col].AddFirst(lines[i][j]);
+		}
+		col++;
 	}
+}
+
+// Validate stacks
+foreach (LinkedList<char> stack in stacks)
+{
+	Console.WriteLine(string.Join(",", stack));
 }
