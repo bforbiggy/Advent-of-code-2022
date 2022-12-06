@@ -7,7 +7,7 @@ LinkedList<char> previous = new LinkedList<char>();
 for (int i = 0; i < input.Length; i++)
 {
 	// Prune current list if necessary
-	if (previous.Count >= 4)
+	if (previous.Count >= 14)
 	{
 		char removed = previous.First.Value;
 		previous.RemoveFirst();
@@ -19,7 +19,7 @@ for (int i = 0; i < input.Length; i++)
 	if (!previous.Any(match => match == input[i]))
 		unique++;
 	// Achieved unique character count: Solution found
-	if (unique == 4)
+	if (unique == 14)
 	{
 		Console.WriteLine(i + 1);
 		break;
