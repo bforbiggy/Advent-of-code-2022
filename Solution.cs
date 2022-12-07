@@ -41,11 +41,9 @@ for (int i = 0; i < lines.Length; i++)
 	}
 }
 
-// Traverse file system, looking for smallest directory to delete
-int freeAmount = 70000000 - root.value;
-int minimumFree = 30000000 - freeAmount;
-int smallest = Int32.MaxValue;
-void free_traverse(Node node)
+// Traverse file system, summing up valid directories
+int total = 0;
+void total_traverse(Node node)
 {
 	// Base case: Files are ignored
 	if (node.isFile())
@@ -53,9 +51,9 @@ void free_traverse(Node node)
 
 	// Recursive case: Traverse children
 	foreach (Node child in node.children)
-		free_traverse(child);
-	if (node.value >= minimumFree && node.value <= smallest)
-		smallest = node.value;
+		total_traverse(child);
+	if (node.value <= 100000)
+		total += node.value;
 }
-free_traverse(root);
-Console.WriteLine(smallest);
+total_traverse(root);
+Console.WriteLine(total);
