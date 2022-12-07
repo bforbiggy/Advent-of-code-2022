@@ -51,8 +51,7 @@ for (int i = 0; i < lines.Length; i++)
 }
 
 // Traverse file system, tracking file size along the way
-int total = 0;
-int traverse(Node node)
+int total_traverse(Node node)
 {
 	if (node.isFile())
 	{
@@ -61,12 +60,29 @@ int traverse(Node node)
 	else
 	{
 		foreach (Node child in node.children)
-			node.value += traverse(child);
-
-		if (node.value <= 100000)
-			total += node.value;
+			node.value += total_traverse(child);
 		return node.value;
 	}
 }
-traverse(root);
-Console.WriteLine(total);
+int used = total_traverse(root);
+
+// Traverse file system, looking for smallest directory to delete
+int freeAmount = 70000000 - used;
+int minimumFree = 30000000 - freeAmount;
+int smallest = Int32.MaxValue;
+void free_traverse(Node node)
+{
+	if (node.isFile())
+	{
+		return;
+	}
+	else
+	{
+		foreach (Node child in node.children)
+			free_traverse(child);
+		if (node.value >= minimumFree && node.value <= smallest)
+			smallest = node.value;
+	}
+}
+free_traverse(root);
+Console.WriteLine(smallest);
