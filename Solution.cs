@@ -11,66 +11,57 @@ for (int y = 0; y < trees.Length; y++)
 		trees[y][x] = lines[y][x] - '0';
 }
 
-int viewTop(int x, int y)
+bool visibleFromTop(int x, int y)
 {
-	int count = 0;
 	int height = trees[y][x];
 	while (--y >= 0)
 	{
-		count++;
 		if (trees[y][x] >= height)
-			return count;
+			return false;
 	}
-	return count;
+	return true;
 }
 
-int viewBottom(int x, int y)
+bool visibleFromBottom(int x, int y)
 {
-	int count = 0;
 	int height = trees[y][x];
 	while (++y < trees.Length)
 	{
-		count++;
 		if (trees[y][x] >= height)
-			return count;
+			return false;
 	}
-	return count;
+	return true;
 }
 
-int viewLeft(int x, int y)
+bool visibleFromLeft(int x, int y)
 {
-	int count = 0;
 	int height = trees[y][x];
 	while (--x >= 0)
 	{
-		count++;
 		if (trees[y][x] >= height)
-			return count;
+			return false;
 	}
-	return count;
+	return true;
 }
 
-int viewRight(int x, int y)
+bool visibleFromRight(int x, int y)
 {
-	int count = 0;
 	int height = trees[y][x];
 	while (++x < trees[y].Length)
 	{
-		count++;
 		if (trees[y][x] >= height)
-			return count;
+			return false;
 	}
-	return count;
+	return true;
 }
 
-
-int max = 0;
+int total = 0;
 for (int y = 0; y < trees.Length; y++)
 {
 	for (int x = 0; x < trees[y].Length; x++)
 	{
-		int temp = viewLeft(x, y) * viewRight(x, y) * viewTop(x, y) * viewBottom(x, y);
-		max = Math.Max(max, temp);
+		if (visibleFromLeft(x, y) || visibleFromRight(x, y) || visibleFromTop(x, y) || visibleFromBottom(x, y))
+			total++;
 	}
 }
-Console.WriteLine(max);
+Console.WriteLine(total);
