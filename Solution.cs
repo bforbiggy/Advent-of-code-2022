@@ -1,15 +1,17 @@
 ﻿using System;
 
 // Grid information
-Position head = new Position(0, 0);
-Position tail = new Position(0, 0);
+List<Position> knots = new List<Position>();
+for (int i = 0; i < 10; i++)
+	knots.Add(new Position(0, 0));
+
 HashSet<Position> visited = new HashSet<Position>();
 
-// Have tail follow head if necessary
-void followHead()
+// Have this knot follow other knot if necessary
+Position follow(Position a, Position b)
 {
 	Position delta = new Position(0, 0);
-	Position distance = new Position(head.x - tail.x, head.y - tail.y);
+	Position distance = new Position(b.x - a.x, b.y - a.y);
 
 	// Required movements
 	if (distance.x >= 2)
@@ -38,8 +40,7 @@ void followHead()
 	}
 
 	// Perform movement
-	tail += delta;
-	visited.Add(tail);
+	return a + delta;
 }
 
 // Perform head movement
@@ -62,8 +63,15 @@ foreach (string line in File.ReadLines("input.txt"))
 	// Repeat movement as specified
 	for (int i = 0; i < distance; i++)
 	{
-		head += delta;
-		followHead();
+		knots[9] += delta;
+
+		// After moving head, have each knot follow the next
+		for (int j = 8; j >= 0; j--)
+		{
+			knots[j] = follow(knots[j], knots[j + 1]);
+		}
+
+		visited.Add(knots[0]);
 	}
 }
 
