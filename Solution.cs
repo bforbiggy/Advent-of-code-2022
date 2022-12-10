@@ -1,19 +1,27 @@
 ﻿using System;
 
-int strengthSum = 0;
+bool[,] display = new bool[6, 40];
+
 void processCycle(int register, int cycle)
 {
-	if ((cycle - 20) % 40 == 0)
-		strengthSum += register * cycle;
+	int temp = cycle % (6 * 40);
+	int row = temp / 40;
+	int col = temp % 40;
+
+	// Sprite is at current draw location
+	if (col <= register + 1 && col >= register - 1)
+	{
+		display[row, col] = true;
+	}
 }
 
-int x = 1;
-int cycle = 1;
+int register = 1;
+int cycle = 0;
 foreach (string line in File.ReadLines("input.txt"))
 {
 	if (line.StartsWith("noop"))
 	{
-		processCycle(x, cycle);
+		processCycle(register, cycle);
 		cycle++;
 	}
 	else if (line.StartsWith("addx"))
@@ -22,12 +30,19 @@ foreach (string line in File.ReadLines("input.txt"))
 
 		for (int i = 0; i < 2; i++)
 		{
-			processCycle(x, cycle);
+			processCycle(register, cycle);
 			cycle++;
 		}
 
-		x += val;
+		register += val;
 	}
 }
 
-Console.WriteLine(strengthSum);
+for (int y = 0; y < display.GetLength(0); y++)
+{
+	for (int x = 0; x < display.GetLength(1); x++)
+	{
+		Console.Write(display[y, x] ? "#" : ".");
+	}
+	Console.WriteLine();
+}
