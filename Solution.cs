@@ -1,9 +1,4 @@
 ﻿using System;
 
-public class Solution
-{
-	public static void Main()
-	{
-		Console.WriteLine("Initial commit.");
-	}
-}
+
+Console.WriteLine("No real code, pick a branch for a specific problem.");
