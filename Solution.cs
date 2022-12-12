@@ -64,7 +64,7 @@ for (int i = 0; i < 10000; i++)
 		for (int itemIndex = 0; itemIndex < items.Count; itemIndex++)
 		{
 			monkey.inspected++;
-			items[itemIndex] = monkey.operation(items[itemIndex]);
+			items[itemIndex] = monkey.operation(items[itemIndex]) % denom;
 			int target = monkey.test(items[itemIndex]) ? monkey.trueTarget : monkey.falseTarget;
 			monkeys[target].items.Add(items[itemIndex]);
 		}
