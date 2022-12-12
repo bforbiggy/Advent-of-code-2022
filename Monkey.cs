@@ -1,5 +1,6 @@
 public class Monkey
 {
+	public int inspected = 0;
 	public List<int> items;
 	public Func<int, int> operation;
 	public Func<int, bool> test;
