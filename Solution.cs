@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections;
 using System.Runtime.CompilerServices;
 
 // Construct heightmap
@@ -62,34 +63,39 @@ IEnumerable<Position> getNeighbors(Position pos)
 }
 
 // Breadth first search until target is found
-int walk = 0;
 HashSet<Position> visited = new HashSet<Position>();
-Queue<Position> queue = new Queue<Position>();
-queue.Enqueue(start);
+Queue<List<Position>> queue = new Queue<List<Position>>();
+queue.Enqueue(new List<Position>(new Position[] { start }));
 while (queue.Count != 0)
 {
-	Position pos = queue.Dequeue();
-	visited.Add(pos);
+	List<Position> path = queue.Dequeue();
+	Position next = path[path.Count - 1];
+	visited.Add(next);
+
+	// Path reached end, done
+	if (end.Equals(next))
+	{
+		Console.WriteLine(path.Count);
+		System.Environment.Exit(0);
+	}
+
+	// Visit node
+	visited.Add(next);
 
 	// Traverse neighbors
-	IEnumerable<Position> neighbors = getNeighbors(pos);
-	foreach (Position next in neighbors)
+	IEnumerable<Position> neighbors = getNeighbors(next);
+	foreach (Position neighbor in neighbors)
 	{
 		// Unreachable positions are ignored
-		if (map[next.row][next.col] + 1 < map[pos.row][pos.col])
+		if (map[next.row][next.col] + 1 < map[neighbor.row][neighbor.col])
 			continue;
 
 		// Visited neighbors are ignored
-		if (visited.Contains(next))
+		if (visited.Contains(neighbor))
 			continue;
 
-		// Found goal: print walk length and quit
-		if (end.Equals(next))
-		{
-			Console.WriteLine(walk);
-			System.Environment.Exit(0);
-		}
-
-		queue.Enqueue(next);
+		List<Position> newPath = new List<Position>(path);
+		newPath.Add(neighbor);
+		queue.Enqueue(newPath);
 	}
 }
