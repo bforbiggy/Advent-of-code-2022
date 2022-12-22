@@ -5,17 +5,18 @@ using System.Runtime.CompilerServices;
 // Construct heightmap
 string[] lines = File.ReadAllLines("input.txt");
 int[][] map = new int[lines.Length][];
-Position start = null!;
+List<Position> starts = new List<Position>();
 Position end = null!;
 for (int row = 0; row < lines.Length; row++)
 {
 	map[row] = new int[lines[row].Length];
 	for (int col = 0; col < lines[row].Length; col++)
 	{
-		if (lines[row][col] == 'S')
+		if (lines[row][col] == 'a')
 		{
 			map[row][col] = 'a' - 'a';
-			start = new Position(row, col);
+			Position start = new Position(row, col);
+			starts.Add(start);
 		}
 		else if (lines[row][col] == 'E')
 		{
@@ -63,36 +64,44 @@ IEnumerable<Position> getNeighbors(Position pos)
 }
 
 // Breadth first search until target is found
-HashSet<Position> visited = new HashSet<Position>();
-Queue<List<Position>> queue = new Queue<List<Position>>();
-queue.Enqueue(new List<Position>(new Position[] { start }));
-while (queue.Count != 0)
+int min = int.MaxValue;
+foreach (Position start in starts)
 {
-	List<Position> path = queue.Dequeue();
-	Position next = path[path.Count - 1];
+	HashSet<Position> visited = new HashSet<Position>();
+	Queue<List<Position>> queue = new Queue<List<Position>>();
+	queue.Enqueue(new List<Position>(new Position[] { start }));
 
-	// Path reached end, done
-	if (end.Equals(next))
+	while (queue.Count != 0)
 	{
-		Console.WriteLine(path.Count - 1);
-		System.Environment.Exit(0);
-	}
+		List<Position> path = queue.Dequeue();
+		Position next = path[path.Count - 1];
 
-	// Visit node, ignoring already visited ones
-	if (visited.Contains(next))
-		continue;
-	visited.Add(next);
+		// Path reached end, done
+		if (end.Equals(next))
+		{
+			if (path.Count < min)
+				min = path.Count;
+			break;
+		}
 
-	// Traverse neighbors
-	IEnumerable<Position> neighbors = getNeighbors(next);
-	foreach (Position neighbor in neighbors)
-	{
-		// Unreachable positions are ignored
-		if (map[next.row][next.col] + 1 < map[neighbor.row][neighbor.col])
+		// Visit node, ignoring already visited ones
+		if (visited.Contains(next))
 			continue;
+		visited.Add(next);
 
-		List<Position> newPath = new List<Position>(path);
-		newPath.Add(neighbor);
-		queue.Enqueue(newPath);
+		// Traverse neighbors
+		IEnumerable<Position> neighbors = getNeighbors(next);
+		foreach (Position neighbor in neighbors)
+		{
+			// Unreachable positions are ignored
+			if (map[next.row][next.col] + 1 < map[neighbor.row][neighbor.col])
+				continue;
+
+			List<Position> newPath = new List<Position>(path);
+			newPath.Add(neighbor);
+			queue.Enqueue(newPath);
+		}
 	}
 }
+Console.WriteLine(min - 1);
+
