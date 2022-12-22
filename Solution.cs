@@ -70,16 +70,17 @@ while (queue.Count != 0)
 {
 	List<Position> path = queue.Dequeue();
 	Position next = path[path.Count - 1];
-	visited.Add(next);
 
 	// Path reached end, done
 	if (end.Equals(next))
 	{
-		Console.WriteLine(path.Count);
+		Console.WriteLine(path.Count - 1);
 		System.Environment.Exit(0);
 	}
 
-	// Visit node
+	// Visit node, ignoring already visited ones
+	if (visited.Contains(next))
+		continue;
 	visited.Add(next);
 
 	// Traverse neighbors
@@ -88,10 +89,6 @@ while (queue.Count != 0)
 	{
 		// Unreachable positions are ignored
 		if (map[next.row][next.col] + 1 < map[neighbor.row][neighbor.col])
-			continue;
-
-		// Visited neighbors are ignored
-		if (visited.Contains(neighbor))
 			continue;
 
 		List<Position> newPath = new List<Position>(path);

@@ -1,4 +1,4 @@
-public class Position
+public class Position : IEquatable<Position>
 {
 	public int row;
 	public int col;
@@ -14,12 +14,20 @@ public class Position
 		return $"{row},{col}".GetHashCode();
 	}
 
-	public override bool Equals(object obj)
+	public override bool Equals(object? obj)
 	{
 		if (obj == null || GetType() != obj.GetType())
 			return false;
 
 		Position other = (Position)obj;
+		return row == other.row && col == other.col;
+	}
+
+	public bool Equals(Position? other)
+	{
+		if (other == null)
+			return false;
+
 		return row == other.row && col == other.col;
 	}
 }
